@@ -25,3 +25,15 @@ def index(request):
     año_actual = datetime.now().year
     contexto = {"año": año_actual, "autor": "EduIT"}
     return render(request, "core/index.html", contexto)
+
+
+def ejercicio1(request):
+    nombre = "Louis"
+    apellido = "Beethoven"
+    context = {"nombre": nombre, "apellido": apellido}
+    return render(request, "core/ejercicio1.html", context)
+
+
+def ver_notas(request):
+    lista_notas = [10, 7, 4, 7, 8, 3, 5, 6]
+    return render(request, "core/notas.html", {"notas": lista_notas})

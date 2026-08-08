@@ -26,4 +26,6 @@ urlpatterns = [
     path("saludar-tag/", core.views.saludar_tag),
     path("parametros/<str:nombre>/<str:apellido>/", core.views.parametros_ruta),
     path("", core.views.index),
+    path("ejercicio1/", core.views.ejercicio1),
+    path("notas/", core.views.ver_notas),
 ]
