@@ -1,12 +1,17 @@
 {% extends 'core/base.html' %}
 
 {% block contenido %}
-
-    <p><a href="{% url 'producto:categoria_create' %}">Crear categorías</a></p>
-    <h2>Categorías - Lista</h2>
-    <ul>
-        {% for categoria in categorias %}
-            <li>{{ categoria }}</li>
-        {% endfor %}
-    </ul>
+    <main>
+        <h1>Producto</h1>
+        <section>
+            <h2>Categoría</h2>
+            <ol>
+                <li><a href="{% url 'producto:categoria_list' %}">Listar</a></li>
+                <li><a href="{% url 'producto:categoria_create' %}">Crear</a></li>
+            </ol>
+        </section>
+        <div>
+            <a href="{% url 'core:home' %}">Volver</a>
+        </div>
+    </main>
 {% endblock contenido %}

@@ -1,7 +1,6 @@
 {% extends 'core/base.html' %}
 
 {% block contenido %}
-
     <h2>Categoría: Crear</h2>
 
     <form method="POST">
@@ -12,4 +11,7 @@
         <button type="submit">Enviar datos</button>
     </form>
 
+    <div>
+        <a href="{% url 'producto:home' %}">Volver</a>
+    </div>
 {% endblock contenido %}

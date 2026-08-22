@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block contenido %}
+    <h2>Categoría - Lista</h2>
+    <ul>
+        {% for categoria in categorias %}
+            <li>{{ categoria }}</li>
+        {% endfor %}
+    </ul>
+    <div>
+        <a href="{% url 'producto:home' %}">Volver</a>
+    </div>
+{% endblock contenido %}
