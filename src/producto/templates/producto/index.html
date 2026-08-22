@@ -1,7 +1,8 @@
 {% extends 'core/base.html' %}
 
 {% block contenido %}
-    <h1>Producto</h1>
+
+    <p><a href="{% url 'producto:categoria_create' %}">Crear categorías</a></p>
     <h2>Categorías - Lista</h2>
     <ul>
         {% for categoria in categorias %}

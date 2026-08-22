@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block contenido %}
+
+    <h2>Categoría: Crear</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit">Enviar datos</button>
+    </form>
+
+{% endblock contenido %}
