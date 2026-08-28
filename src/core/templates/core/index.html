@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-
 {% block contenido %}
     <main>
         <h1>La Caja de Pandora</h1>
@@ -12,5 +11,7 @@
             <li><a href="{% url 'producto:home' %}">Producto</a></li>
         </ol>
     </main>
-    <footer>Hecho en el año {{ año }} - Autor: {{ autor }}</footer>
+    <footer>
+        Hecho en el año {{ año }} - Autor: {{ autor }}
+    </footer>
 {% endblock contenido %}
