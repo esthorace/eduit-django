@@ -5,14 +5,12 @@ description = "Proyecto Django para alumnos de EducaciónIT"
 readme = "README.md"
 authors = [{ name = "Esteban H. Acevedo" }]
 requires-python = ">=3.14"
+
 dependencies = ["django>=6.1"]
 
-[project.scripts]
-eduit-django = "eduit_django:main"
+[tool.uv]
+package = false
 
-[build-system]
-requires = ["uv_build>=0.12.7,<0.13.0"]
-build-backend = "uv_build"
 
 [dependency-groups]
 dev = ["djlint>=1.44.2"]
