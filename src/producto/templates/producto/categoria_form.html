@@ -1,6 +1,10 @@
 {% extends 'core/base.html' %}
 {% block contenido %}
-    <h2>Categoría: Crear</h2>
+    {% if form.instance.pk %}
+        <h2>Categoría: Actualizar</h2>
+    {% else %}
+        <h2>Categoría: Crear</h2>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <table>

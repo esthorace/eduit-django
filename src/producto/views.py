@@ -1,5 +1,5 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from producto.forms import CategoriaForm
 from producto.models import Categoria
@@ -24,13 +24,10 @@ def categoria_create(request: HttpRequest) -> HttpResponse:
 
 
 def categoria_update(request: HttpRequest, pk: int) -> HttpResponse:
-    query = Categoria.objects.get(id=pk)
-    if request.method == "GET":
-        form = CategoriaForm(instance=query)
+    query = get_object_or_404(Categoria, id=pk)
+    form = CategoriaForm(request.POST or None, instance=query)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("producto:categoria_list")
 
-    if request.method == "POST":
-        form = CategoriaForm(request.POST, instance=query)
-        if form.is_valid():
-            form.save()
-            return redirect("producto:categoria_list")
     return render(request, "producto/categoria_form.html", {"form": form})
