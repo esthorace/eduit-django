@@ -4,10 +4,10 @@
     <ul>
         {% for categoria in categorias %}
             <li>
-                {{ categoria.id }} {{ categoria.nombre }}
-                <a href="#">Ver</a>
+                {{ categoria.nombre }}
+                <a href="{% url 'producto:categoria_detail' categoria.id %}">Ver</a>
                 <a href="{% url 'producto:categoria_update' categoria.id %}">Editar</a>
-                <a href="#">Eliminar</a>
+                <a href="{% url 'producto:categoria_delete' categoria.id %}">Eliminar</a>
             </li>
         {% endfor %}
     </ul>

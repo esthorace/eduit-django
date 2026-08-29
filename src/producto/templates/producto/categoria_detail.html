@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% block contenido %}
+    <h2>Categoría - Ver detalle</h2>
+    <ul>
+        <li><strong>Nombre:</strong> {{ categoria.nombre }}</li>
+        <li>
+            <strong>Descripción:</strong>
+            {% if categoria.descripcion %}
+                {{ categoria.descripcion }}
+            {% else %}
+                -
+            {% endif %}
+        </li>
+    </ul>
+    <div>
+        <a href="{% url 'producto:categoria_list' %}">Volver</a>
+    </div>
+{% endblock contenido %}

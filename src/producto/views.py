@@ -31,3 +31,16 @@ def categoria_update(request: HttpRequest, pk: int) -> HttpResponse:
         return redirect("producto:categoria_list")
 
     return render(request, "producto/categoria_form.html", {"form": form})
+
+
+def categoria_detail(request: HttpRequest, pk: int) -> HttpResponse:
+    categoria = get_object_or_404(Categoria, id=pk)
+    return render(request, "producto/categoria_detail.html", {"categoria": categoria})
+
+
+def categoria_delete(request: HttpRequest, pk: int) -> HttpResponse:
+    categoria = get_object_or_404(Categoria, id=pk)
+    if request.method == "POST":
+        categoria.delete()
+        return redirect("producto:categoria_list")
+    return render(request, "producto/categoria_confirm_delete.html", {"categoria": categoria})
