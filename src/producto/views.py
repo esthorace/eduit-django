@@ -1,19 +1,17 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from producto.forms import CategoriaForm
 from producto.models import Categoria
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     return render(request, "producto/index.html")
 
 
-def categoria_list(request):
+def categoria_list(request: HttpRequest) -> HttpResponse:
     categorias = Categoria.objects.all()
-    return render(
-        request, "producto/categoria_list.html", context={"categorias": categorias}
-    )
+    return render(request, "producto/categoria_list.html", context={"categorias": categorias})
 
 
 def categoria_create(request: HttpRequest) -> HttpResponse:
@@ -22,4 +20,17 @@ def categoria_create(request: HttpRequest) -> HttpResponse:
         form.save()
         return redirect("producto:home")
 
+    return render(request, "producto/categoria_form.html", {"form": form})
+
+
+def categoria_update(request: HttpRequest, pk: int) -> HttpResponse:
+    query = Categoria.objects.get(id=pk)
+    if request.method == "GET":
+        form = CategoriaForm(instance=query)
+
+    if request.method == "POST":
+        form = CategoriaForm(request.POST, instance=query)
+        if form.is_valid():
+            form.save()
+            return redirect("producto:categoria_list")
     return render(request, "producto/categoria_form.html", {"form": form})

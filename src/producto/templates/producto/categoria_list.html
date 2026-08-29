@@ -3,7 +3,12 @@
     <h2>Categoría - Lista</h2>
     <ul>
         {% for categoria in categorias %}
-            <li>{{ categoria }}</li>
+            <li>
+                {{ categoria.id }} {{ categoria.nombre }}
+                <a href="#">Ver</a>
+                <a href="{% url 'producto:categoria_update' categoria.id %}">Editar</a>
+                <a href="#">Eliminar</a>
+            </li>
         {% endfor %}
     </ul>
     <div>
