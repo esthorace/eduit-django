@@ -1,8 +1,16 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-from producto.forms import CategoriaForm
-from producto.models import Categoria
+from producto.forms import CategoriaForm, ProductoForm
+from producto.models import Categoria, Producto
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -44,3 +52,28 @@ def categoria_delete(request: HttpRequest, pk: int) -> HttpResponse:
         categoria.delete()
         return redirect("producto:categoria_list")
     return render(request, "producto/categoria_confirm_delete.html", {"categoria": categoria})
+
+
+class ProductoListView(ListView):
+    model = Producto
+
+
+class ProductoDetailView(DetailView):
+    model = Producto
+
+
+class ProductoCreateView(CreateView):
+    model = Producto
+    form_class = ProductoForm
+    success_url = reverse_lazy("producto:producto_list")
+
+
+class ProductoUpdateView(UpdateView):
+    model = Producto
+    form_class = ProductoForm
+    success_url = reverse_lazy("producto:producto_list")
+
+
+class ProductoDeleteView(DeleteView):
+    model = Producto
+    success_url = reverse_lazy("producto:producto_list")

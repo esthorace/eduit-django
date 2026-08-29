@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block contenido %}
+    <h2>Producto - Ver detalle</h2>
+    <div class="producto-detail">
+        <ul>
+            <li>
+                <strong>Categoría:</strong>
+                {% if producto.categoria %}
+                    {{ producto.categoria }}
+                {% else %}
+                    Sin categoría
+                {% endif %}
+            </li>
+            <li><strong>Nombre:</strong> {{ producto.nombre }}</li>
+            <li>
+                <strong>Descripción:</strong>
+                {% if producto.descripcion %}
+                    {{ producto.descripcion }}
+                {% else %}
+                    -
+                {% endif %}
+            </li>
+            <li><strong>Precio:</strong> ${{ producto.precio }}</li>
+            <li><strong>Stock:</strong> {{ producto.stock }} unidades</li>
+        </ul>
+    </div>
+    <div>
+        <a href="{% url 'producto:producto_list' %}">Volver</a>
+    </div>
+{% endblock contenido %}

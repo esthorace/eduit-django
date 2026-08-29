@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+{% block contenido %}
+    <h2>Producto - Eliminar</h2>
+    <p>¿Estás seguro que quieres eliminar "{{ producto }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, confirmo</button>
+    </form>
+    <div>
+        <a href="{% url 'producto:producto_list' %}">Volver</a>
+    </div>
+{% endblock contenido %}

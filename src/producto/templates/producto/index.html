@@ -3,9 +3,16 @@
     <main>
         <h1>Producto</h1>
         <section>
-            <h2>Categoría</h2>
+            <h2>Categorías de Productos</h2>
             <ol>
                 <li><a href="{% url 'producto:categoria_list' %}">Listar</a></li>
+                <li><a href="{% url 'producto:categoria_create' %}">Crear</a></li>
+            </ol>
+        </section>
+        <section>
+            <h2>Productos</h2>
+            <ol>
+                <li><a href="{% url 'producto:producto_list' %}">Listar</a></li>
                 <li><a href="{% url 'producto:categoria_create' %}">Crear</a></li>
             </ol>
         </section>
