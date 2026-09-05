@@ -1,15 +1,29 @@
 {% extends 'core/base.html' %}
 {% block contenido %}
     <main>
+        <nav>
+            <ul>
+                <li><a href="{% url 'core:home' %}">Inicio</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'producto:home' %}">Producto</a></li>
+                    <li><a href="#">{{ user.username }}</a></li>
+                    <li>
+                        <form method="post" action="{% url 'core:logout' %}">
+                            {% csrf_token %}
+                            <input type="submit" value="Cerrar sesión">
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'core:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
         <h1>La Caja de Pandora</h1>
         <ul>
             <li>Es un framework moderno para crear aplicaciones web</li>
             <li>Su comunidad mundial es muy grande</li>
             <li>Hay miles de herramientas para no reinventar la rueda</li>
         </ul>
-        <ol>
-            <li><a href="{% url 'producto:home' %}">Producto</a></li>
-        </ol>
     </main>
     <footer>
         Hecho en el año {{ año }} - Autor: {{ autor }}
