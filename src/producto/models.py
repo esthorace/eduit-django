@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import constraints
 
 
 class Categoria(models.Model):
@@ -9,7 +8,7 @@ class Categoria(models.Model):
     class Meta:
         verbose_name = "Categoría de Productos"
         verbose_name_plural = "Categorías de Productos"
-        ordering = ["nombre"]
+        ordering = ("nombre",)
 
     def __str__(self):
         return self.nombre
@@ -32,12 +31,10 @@ class Producto(models.Model):
     class Meta:
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
-        ordering = ["nombre"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["categoria", "nombre"], name="unique_producto_categoria"
-            )
-        ]
+        ordering = ("nombre",)
+        constraints = models.UniqueConstraint(
+            fields=["categoria", "nombre"], name="unique_producto_categoria"
+        )
 
     def __str__(self):
         if self.categoria:
