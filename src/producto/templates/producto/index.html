@@ -1,20 +1,12 @@
 {% extends 'core/base.html' %}
 {% block contenido %}
     <main>
-        <h1>Producto</h1>
+        <h1>Módulo Producto</h1>
         <section>
-            <h2>Categorías de Productos</h2>
-            <ol>
-                <li><a href="{% url 'producto:categoria_list' %}">Listar</a></li>
-                <li><a href="{% url 'producto:categoria_create' %}">Crear</a></li>
-            </ol>
+            <a href="{% url 'producto:categoria_list' %}">Categorías de Productos</a>
         </section>
         <section>
-            <h2>Productos</h2>
-            <ol>
-                <li><a href="{% url 'producto:producto_list' %}">Listar</a></li>
-                <li><a href="{% url 'producto:producto_create' %}">Crear</a></li>
-            </ol>
+            <a href="{% url 'producto:producto_list' %}">Productos</a>
         </section>
         <div>
             <a href="{% url 'core:home' %}">Volver</a>

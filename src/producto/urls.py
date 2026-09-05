@@ -1,24 +1,26 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
-from producto import views
+from producto.views import categoria, producto
 
 app_name = "producto"
 
-urlpatterns = [path("", views.index, name="home")]
-
-# Categoría
-urlpatterns += [
-    path("categoria/list/", views.categoria_list, name="categoria_list"),
-    path("categoria/create/", views.categoria_create, name="categoria_create"),
-    path("categoria/update/<int:pk>", views.categoria_update, name="categoria_update"),
-    path("categoria/detail/<int:pk>", views.categoria_detail, name="categoria_detail"),
-    path("categoria/delete/<int:pk>", views.categoria_delete, name="categoria_delete"),
+urlpatterns = [
+    path("", TemplateView.as_view(template_name="producto/index.html"), name="home"),
 ]
-# Producto
+
 urlpatterns += [
-    path("producto/list/", views.ProductoListView.as_view(), name="producto_list"),
-    path("producto/create/", views.ProductoCreateView.as_view(), name="producto_create"),
-    path("producto/detail/<int:pk>", views.ProductoDetailView.as_view(), name="producto_detail"),
-    path("producto/update/<int:pk>", views.ProductoUpdateView.as_view(), name="producto_update"),
-    path("producto/delete/<int:pk>", views.ProductoDeleteView.as_view(), name="producto_delete"),
+    path("categoria/list/", categoria.categoria_list, name="categoria_list"),
+    path("categoria/create/", categoria.categoria_create, name="categoria_create"),
+    path("categoria/update/<int:pk>", categoria.categoria_update, name="categoria_update"),
+    path("categoria/detail/<int:pk>", categoria.categoria_detail, name="categoria_detail"),
+    path("categoria/delete/<int:pk>", categoria.categoria_delete, name="categoria_delete"),
+]
+
+urlpatterns += [
+    path("producto/list/", producto.ProductoListView.as_view(), name="producto_list"),
+    path("producto/create/", producto.ProductoCreateView.as_view(), name="producto_create"),
+    path("producto/detail/<int:pk>", producto.ProductoDetailView.as_view(), name="producto_detail"),
+    path("producto/update/<int:pk>", producto.ProductoUpdateView.as_view(), name="producto_update"),
+    path("producto/delete/<int:pk>", producto.ProductoDeleteView.as_view(), name="producto_delete"),
 ]

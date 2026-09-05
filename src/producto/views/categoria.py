@@ -1,22 +1,9 @@
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
 
-from producto.forms import CategoriaForm, ProductoForm
-from producto.models import Categoria, Producto
-
-
-def index(request: HttpRequest) -> HttpResponse:
-    return render(request, "producto/index.html")
+from producto.forms import CategoriaForm
+from producto.models import Categoria
 
 
 def categoria_list(request: HttpRequest) -> HttpResponse:
@@ -57,31 +44,3 @@ def categoria_delete(request: HttpRequest, pk: int) -> HttpResponse:
         messages.success(request, "La categoría fue eliminada")
         return redirect("producto:categoria_list")
     return render(request, "producto/categoria_confirm_delete.html", {"categoria": categoria})
-
-
-class ProductoListView(ListView):
-    model = Producto
-
-
-class ProductoDetailView(DetailView):
-    model = Producto
-
-
-class ProductoCreateView(SuccessMessageMixin, CreateView):
-    model = Producto
-    form_class = ProductoForm
-    success_url = reverse_lazy("producto:producto_list")
-    success_message = "El producto se ha creado exitosamente"
-
-
-class ProductoUpdateView(SuccessMessageMixin, UpdateView):
-    model = Producto
-    form_class = ProductoForm
-    success_url = reverse_lazy("producto:producto_list")
-    success_message = "El producto se ha actualizado exitosamente"
-
-
-class ProductoDeleteView(SuccessMessageMixin, DeleteView):
-    model = Producto
-    success_url = reverse_lazy("producto:producto_list")
-    success_message = "El producto se ha eliminado exitosamente"
