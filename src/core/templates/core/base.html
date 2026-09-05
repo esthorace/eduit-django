@@ -6,6 +6,9 @@
         <title>La Caja de Pandora</title>
     </head>
     <body>
+        {% block mensajes %}
+            {% include 'core/partials/mensajes.html' %}
+        {% endblock %}
         {% block contenido %}
         {% endblock contenido %}
     </body>

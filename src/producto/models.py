@@ -32,8 +32,10 @@ class Producto(models.Model):
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
         ordering = ("nombre",)
-        constraints = models.UniqueConstraint(
-            fields=["categoria", "nombre"], name="unique_producto_categoria"
+        constraints = (
+            models.UniqueConstraint(
+                fields=["categoria", "nombre"], name="unique_producto_categoria"
+            ),
         )
 
     def __str__(self):
