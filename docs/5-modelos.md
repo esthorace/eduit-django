@@ -1,91 +1,123 @@
-# Campos y Tipos de Datos en Django
+# Campos y tipos de datos en Django
+
+## Opciones comunes a todos los campos
+
+| Opción                      | Descripción                                        |
+|-----------------------------|----------------------------------------------------|
+| `null=True`                 | Permite `NULL` en la base de datos                 |
+| `blank=True`                | Permite vacío en validaciones y formularios        |
+| `default=...`               | Valor por defecto (puede ser un callable)          |
+| `unique=True`               | Valor único en la tabla                            |
+| `db_index=True`             | Crea un índice                                     |
+| `choices=...`               | Restringe a opciones definidas (ver `TextChoices`) |
+| `help_text`, `verbose_name` | Textos para formularios y admin                    |
+
+> **`null` vs `blank`**: en `CharField` y `TextField` se recomienda usar solo `blank=True` (la cadena vacía representa "sin valor"). Usar `null=True` genera dos valores posibles para "vacío".
+
+> **Validación**: Django valida en formularios y en `full_clean()`, **no** al llamar a `save()`.
 
 ## Cadenas
 
-- **`CharField`**:  
-  Un campo de texto corto con una longitud máxima fija, especificada mediante el parámetro `max_length`. No tiene un valor predeterminado, por lo que `max_length` debe establecerse explícitamente.  
-  - En **MySQL**, el tamaño máximo permitido para un `CharField` depende del límite de bytes por fila (65.535 bytes para InnoDB, incluido el overhead).  
-  - En **PostgreSQL**, el tamaño máximo permitido está definido por `max_length` y no puede superarse.  
-
-- **`TextField`**:  
-  Un campo de texto largo sin longitud máxima definida en Django. Su límite depende de la capacidad de almacenamiento de la base de datos subyacente.  
+- **`CharField`**: texto corto. Requiere `max_length` (tamaño de la columna `VARCHAR`).
+  - PostgreSQL y MySQL en modo estricto imponen el límite. SQLite no.
+  - En MySQL, el máximo real depende del charset y del tamaño total de la fila (65.535 bytes en InnoDB).
+  - Desde Django 4.2, en PostgreSQL `max_length` es opcional.
+- **`TextField`**: texto largo. En Django no tiene longitud máxima, así que el límite lo define la base de datos. Si se indica `max_length`, solo afecta al widget del formulario.
 
 ## Números
 
-- **`IntegerField`**:  
-  Un campo que almacena números enteros, con un rango de -2.147.483.648 a 2.147.483.647. Aunque este rango es válido en todas las bases de datos compatibles. SQLite permite valores mayores internamente debido al tipo INTEGER no limitado.
+| Campo                       | Rango                                                  |
+|-----------------------------|--------------------------------------------------------|
+| `SmallIntegerField`         | -32.768 a 32.767                                       |
+| `IntegerField`              | -2.147.483.648 a 2.147.483.647                         |
+| `BigIntegerField`           | -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807 |
+| `PositiveSmallIntegerField` | 0 a 32.767                                             |
+| `PositiveIntegerField`      | 0 a 2.147.483.647                                      |
+| `PositiveBigIntegerField`   | 0 a 9.223.372.036.854.775.807                          |
 
-- **`BigIntegerField`**:  
-  Un campo para números enteros grandes, con un rango de -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807. SQLite no es compatible con este campo.
+> Los rangos son los garantizados por Django en todas las bases de datos soportadas. Las restricciones de los campos `Positive*` se aplican también a nivel de base de datos (`CHECK` o `UNSIGNED`).
 
-- **`DecimalField`**:  
-  Un campo para almacenar números decimales precisos, configurado con dos parámetros obligatorios:  
-  - `max_digits`: Número total de dígitos permitidos (incluidos los decimales).  
-  - `decimal_places`: Número de dígitos a la derecha del punto decimal.  
-  Es ideal para aplicaciones que requieren cálculos financieros o alta precisión decimal. El rango depende de la configuración de estos parámetros y las capacidades de la base de datos.
+- **`DecimalField`**: números decimales exactos. Requiere `max_digits` (total de dígitos, incluidos los decimales) y `decimal_places` (dígitos a la derecha del punto). Devuelve `decimal.Decimal`. Ideal para dinero.
 
-- **`FloatField`**:  
-  Un campo que almacena números en coma flotante. Aunque tiene un rango muy amplio (aproximadamente 2.23 x 10^-308 a 1.80 x 10^308), no es adecuado para cálculos financieros debido a las imprecisiones inherentes de los números de punto flotante.
+```py
+precio = models.DecimalField(max_digits=10, decimal_places=2)
+```
 
-- **`PositiveIntegerField`**:  
-  Un campo para números enteros positivos, con un rango de 0 a 2.147.483.647. Este rango es validado por Django, no por la base de datos.
-
-- **`PositiveSmallIntegerField`**:  
-  Un campo para números enteros pequeños y positivos, con un rango de 0 a 32.767.
-
-- **`SmallIntegerField`**:  
-  Un campo para números enteros pequeños, con un rango de -32.768 a 32.767.
+- **`FloatField`**: coma flotante de doble precisión (aproximadamente ±1,8 × 10³⁰⁸, con ~15 dígitos significativos). No apto para cálculos financieros por sus imprecisiones.
 
 ## Fechas y horas
 
-- **`DateField`**: Almacena una fecha.  
-- **`DateTimeField`**: Almacena una fecha y hora.  
-- **`TimeField`**: Almacena una hora.  
-- **`DurationField`**: Almacena un período de tiempo.
+- **`DateField`**: fecha (`datetime.date`).
+- **`DateTimeField`**: fecha y hora. Con `USE_TZ = True` trabaja con datetimes conscientes de zona horaria.
+- **`TimeField`**: hora.
+- **`DurationField`**: período de tiempo (`timedelta`).
 
-## Propias de las relaciones entre modelos
+`DateField` y `DateTimeField` aceptan:
 
-- **`AutoField`**:  
-  Un identificador único generado automáticamente, utilizado normalmente como clave primaria. Para valores más grandes, usar **`BigAutoField`**.  
+- `auto_now_add=True`: se establece al crear el registro.
+- `auto_now=True`: se actualiza en cada `save()`.
 
-- **`ForeignKey`**:  
-  Establece una relación uno a muchos entre dos modelos. Se requiere el argumento `on_delete` para definir el comportamiento al eliminar el objeto relacionado. Es posible usar `related_name` para definir relaciones inversas personalizadas.  
+## Identificadores
 
-- **`ManyToManyField`**:  
-  Define relaciones muchos a muchos. Django maneja automáticamente la creación de una tabla intermedia para almacenar las relaciones.
+- **`AutoField`**: entero autoincremental de 32 bits, usado como clave primaria.
+- **`BigAutoField`**: igual, pero de 64 bits. Es el valor por defecto en proyectos nuevos desde Django 3.2 (`DEFAULT_AUTO_FIELD`).
+- **`SmallAutoField`**: autoincremental de 16 bits.
+- **`UUIDField`**: identificador universal único. No es secuencial ni adivinable, y es útil en sistemas distribuidos o para exponer IDs en URLs.
 
-- **`UUIDField`**:  
-  Almacena un identificador único universal (UUID), que es globalmente único y útil para garantizar escalabilidad, privacidad y universalidad en aplicaciones distribuidas.
+```py
+id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+```
 
-## `on_delete` en `ForeignKey`
+## Relaciones entre modelos
 
-El parámetro `on_delete` define el comportamiento al eliminar un objeto relacionado:  
+- **`ForeignKey`**: relación uno a muchos. Requiere `on_delete`. Se puede definir `related_name` para la relación inversa.
 
-- `CASCADE`: Borra los objetos relacionados.
-- `PROTECT`: Evita la eliminación generando una excepción.  
-- `SET_NULL`: Establece los campos relacionados en `NULL` (requiere `null=True`).  
-- `SET_DEFAULT`: Establece los campos en su valor predeterminado.  
-- `SET()`: Establece los campos en un valor específico.  
-- `DO_NOTHING`: No hace nada (puede causar referencias rotas).
+```py
+autor = models.ForeignKey(Autor, on_delete=models.CASCADE, related_name="libros")
+```
+
+- **`OneToOneField`**: relación uno a uno. Requiere `on_delete` y se usa, por ejemplo, para extender el modelo de usuario con un perfil.
+- **`ManyToManyField`**: relación muchos a muchos. Django crea la tabla intermedia automáticamente. Con `through=` se puede usar un modelo intermedio propio para guardar datos adicionales de la relación.
+
+### `on_delete`
+
+Define qué ocurre con los objetos que **referencian** al objeto eliminado:
+
+- `CASCADE`: elimina también los objetos que lo referencian.
+- `PROTECT`: impide la eliminación lanzando `ProtectedError`.
+- `RESTRICT`: impide la eliminación lanzando `RestrictedError`, pero permite eliminar si el objeto también se borra por otra cascada (Django 3.1+).
+- `SET_NULL`: establece la clave en `NULL` (requiere `null=True`).
+- `SET_DEFAULT`: establece la clave en su valor por defecto (requiere `default`).
+- `SET(valor_o_callable)`: establece la clave en el valor indicado.
+- `DO_NOTHING`: no hace nada en Django. Si la base de datos impone restricciones de clave foránea, se produce un `IntegrityError`.
 
 ## Archivos
 
-- **`FileField`**:  
-  Almacena archivos en el sistema de archivos del servidor y guarda su ruta en la base de datos. Puede almacenar cualquier tipo de archivo.
-
-- **`ImageField`**:  
-  Subclase de `FileField`, diseñada específicamente para imágenes. Requiere la instalación de **Pillow**. Realiza validaciones adicionales para garantizar que los archivos cargados sean imágenes válidas.
-
-- **`BinaryField`**:  
-  Almacena datos binarios directamente en la base de datos. Puede impactar negativamente el rendimiento si se usa para almacenar archivos grandes.
+- **`FileField`**: guarda la ruta del archivo en la base de datos. El archivo se almacena en el *storage* configurado (por defecto, el sistema de archivos bajo `MEDIA_ROOT`, aunque puede ser S3 u otro). Se define el destino con `upload_to`.
+- **`ImageField`**: subclase de `FileField` que valida que el archivo sea una imagen. Requiere **Pillow** y admite `height_field` y `width_field`.
+- **`BinaryField`**: guarda datos binarios directamente en la base de datos. No es editable en formularios por defecto y puede afectar el rendimiento con archivos grandes.
 
 ## Otros tipos de campo
 
-- **`BooleanField`**: Almacena valores `True` o `False`.  
-- **`EmailField`**: Verifica que el valor tenga un formato válido de correo electrónico.  
-- **`URLField`**: Valida que el valor tenga un formato válido de URL.  
-- **`SlugField`**: Almacena cadenas amigables para URL.  
-- **`JSONField`**: Almacena datos JSON.
-- **`ArrayField`**: Exclusivo de **PostgreSQL**, permite almacenar listas de valores en una sola columna.  
-- **`IPAddressField`**: Almacena direcciones IPv4 válidas.  
-- **`GenericIPAddressField`**: Almacena direcciones IPv4 o IPv6.
+- **`BooleanField`**: `True` o `False`. Para permitir nulos, usar `null=True` (`NullBooleanField` fue eliminado en Django 4.0).
+- **`EmailField`**: valida formato de correo (`max_length=254` por defecto).
+- **`URLField`**: valida formato de URL (`max_length=200` por defecto).
+- **`SlugField`**: cadenas amigables para URL (`max_length=50` y `db_index=True` por defecto).
+- **`JSONField`**: almacena JSON. Soportado en todas las bases de datos oficiales desde Django 3.1.
+- **`ArrayField`**: exclusivo de PostgreSQL (`django.contrib.postgres.fields`). Requiere `base_field`.
+
+```py
+tags = ArrayField(models.CharField(max_length=20), default=list)
+```
+
+- **`GenericIPAddressField`**: direcciones IPv4 o IPv6. Con `protocol="IPv4"` acepta solo IPv4. (`IPAddressField` fue eliminado en Django 1.9).
+
+## Choices con enumeraciones
+
+```py
+class Estado(models.TextChoices):
+    PENDIENTE = "P", "Pendiente"
+    COMPLETADO = "C", "Completado"
+
+estado = models.CharField(max_length=1, choices=Estado.choices, default=Estado.PENDIENTE)
+```
