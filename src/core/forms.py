@@ -1,3 +1,6 @@
+from typing import Any
+
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
@@ -7,14 +10,16 @@ class LoginForm(AuthenticationForm):
         model = AuthenticationForm
         fields = ("username", "password")
 
-    # username = forms.CharField(
-    #     label="Usuario",
-    #     widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Usuario"}),
-    # )
-    # password = forms.CharField(
-    #     label="Contraseña",
-    #     widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Contraseña"}),
-    # )
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["username"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Tu usuario", "autocomplete": "username"}
+        )
+        self.fields["password"].label = "Contraseña"
+        self.fields["password"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Tu contraseña", "autocomplete": "current-password"}
+        )
 
 
 class RegisterForm(UserCreationForm):
@@ -24,6 +29,23 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.fields["username"].help_text = ""
-        self.fields["password1"].help_text = ""
-        self.fields["password2"].help_text = ""
+        field_attrs = {
+            "username": {
+                "class": "form-control",
+                "placeholder": "Elige un usuario",
+                "autocomplete": "username",
+            },
+            "password1": {
+                "class": "form-control",
+                "placeholder": "Crea una contraseña",
+                "autocomplete": "new-password",
+            },
+            "password2": {
+                "class": "form-control",
+                "placeholder": "Repite la contraseña",
+                "autocomplete": "new-password",
+            },
+        }
+        for name, attrs in field_attrs.items():
+            self.fields[name].widget.attrs.update(attrs)
+            self.fields[name].help_text = ""

@@ -1,24 +1,26 @@
 {% if messages %}
     <script>
-        // Configuración global para que actúe como notificación flotante
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        // Iteración segura de los mensajes
-        {% for message in messages %}
+        (() => {
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: isDark ? '#1b2638' : '#ffffff',
+                color: isDark ? '#edf2f7' : '#18212f',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+            {% for message in messages %}
             Toast.fire({
-                icon: '{{ message.tags }}',
+                icon: '{{ message.tags|default:"info" }}',
                 title: '{{ message|escapejs }}'
             });
-        {% endfor %}
+            {% endfor %}
+        })();
     </script>
 {% endif %}

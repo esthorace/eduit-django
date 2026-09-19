@@ -1,48 +1,48 @@
 {% extends "core/base.html" %}
-
 {% load static %}
-
 {% block contenido %}
-    <main>
-        <nav>
-            <ul>
-                <li><a href="{% url 'core:home' %}">Inicio</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'producto:home' %}">Producto</a></li>
-                    <li><a href="#">{{ user.username }}</a></li>
-                    {% with vendedor=user.vendedor_set.first %}
-                        {% if vendedor and vendedor.imagen_perfil %}
-                            <li>
-                                <img src="{{ vendedor.imagen_perfil.url }}"
-                                     alt="Imagen de perfil de {{ user.username }}" />
-                            </li>
+    <div class="container">
+        <section class="hero-panel rounded-4 p-4 p-lg-5 mb-5">
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6">
+                    <span class="badge text-bg-primary rounded-pill mb-3">Tu espacio para aprender</span>
+                    <h1 class="display-5 fw-bold mb-3">Ideas que encuentran su lugar.</h1>
+                    <p class="lead text-muted mb-4">
+                        Explora tecnología, Python y herramientas para construir proyectos web con criterio.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if user.is_authenticated %}
+                            <a class="btn btn-primary" href="{% url 'producto:home' %}">
+                                <i class="bi bi-grid me-2"></i>Explorar productos
+                            </a>
+                        {% else %}
+                            <a class="btn btn-primary" href="{% url 'core:login' %}">
+                                <i class="bi bi-arrow-right me-2"></i>Comenzar ahora
+                            </a>
                         {% endif %}
-                    {% endwith %}
-                    <li>
-                        <form method="post" action="{% url 'core:logout' %}">
-                            {% csrf_token %}
-                            <button type="submit">Cerrar sesión</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'core:login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        <h1>La Caja de Pandora</h1>
-        <div>
-            <img src="{% static 'core/images/caja-pandora.avif' %}" alt="" />
-        </div>
-        <ul>
-            <li>Es un framework moderno para crear aplicaciones web</li>
-            <li>Su comunidad mundial es muy grande</li>
-            <li>Hay miles de herramientas para no reinventar la rueda</li>
-        </ul>
-        {% include "core/partials/card.html" with titulo="Tecnología" descripcion="Ultimos temas de tecno" %}
-        {% include "core/partials/card.html" with titulo="Hogar" descripcion="Todo para el hogar" %}
-        {% include "core/partials/card.html" with titulo="Python" descripcion="Ultimos temas de Python" %}
-    </main>
-    <footer>
-        Hecho en el año {{ año }} - Autor: {{ autor }}
-    </footer>
+                        <a class="btn btn-outline-secondary" href="#recursos">Ver recursos</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img class="hero-image"
+                         src="{% static 'core/images/caja-pandora.avif' %}"
+                         alt="Caja de Pandora, imagen principal de la aplicación" />
+                </div>
+            </div>
+        </section>
+        <section id="recursos" aria-labelledby="resources-title">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+                <div>
+                    <p class="text-primary fw-semibold mb-1">Dentro de la caja</p>
+                    <h2 id="resources-title" class="h3 mb-0">Recursos para seguir avanzando</h2>
+                </div>
+                <span class="text-muted small">Actualizado en {{ año }} · {{ autor }}</span>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% include "core/partials/card.html" with titulo="Tecnología" descripcion="Últimos temas de tecnología." icono="bi-cpu" %}
+                {% include "core/partials/card.html" with titulo="Hogar" descripcion="Ideas prácticas para tu día a día." icono="bi-house-heart" %}
+                {% include "core/partials/card.html" with titulo="Python" descripcion="Herramientas para programar mejor." icono="bi-code-slash" %}
+            </div>
+        </section>
+    </div>
 {% endblock contenido %}

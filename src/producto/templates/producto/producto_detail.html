@@ -1,30 +1,48 @@
 {% extends 'core/base.html' %}
+{% block title %}{{ producto.nombre }} | La Caja de Pandora{% endblock title %}
 {% block contenido %}
-    <h2>Producto - Ver detalle</h2>
-    <div class="producto-detail">
-        <ul>
-            <li>
-                <strong>Categoría:</strong>
-                {% if producto.categoria %}
-                    {{ producto.categoria }}
-                {% else %}
-                    Sin categoría
-                {% endif %}
-            </li>
-            <li><strong>Nombre:</strong> {{ producto.nombre }}</li>
-            <li>
-                <strong>Descripción:</strong>
-                {% if producto.descripcion %}
-                    {{ producto.descripcion }}
-                {% else %}
-                    -
-                {% endif %}
-            </li>
-            <li><strong>Precio:</strong> ${{ producto.precio }}</li>
-            <li><strong>Stock:</strong> {{ producto.stock }} unidades</li>
-        </ul>
-    </div>
-    <div>
-        <a href="{% url 'producto:producto_list' %}">Volver</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-9">
+                <section class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                        <div>
+                            <span class="menu-icon mb-3"><i class="bi bi-box-seam"></i></span>
+                            <h1 class="h3 mb-0">{{ producto.nombre }}</h1>
+                        </div>
+                        <a class="btn btn-outline-primary align-self-start"
+                           href="{% url 'producto:producto_update' producto.id %}"><i class="bi bi-pencil me-2"></i>Editar</a>
+                    </div>
+                    <dl class="detail-list row mb-0">
+                        <div class="col-sm-6">
+                            <dt>Categoría</dt>
+                            <dd>
+                                {{ producto.categoria|default:'Sin categoría' }}
+                            </dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Precio</dt>
+                            <dd>
+                                ${{ producto.precio }}
+                            </dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Stock</dt>
+                            <dd>
+                                {{ producto.stock }} unidades
+                            </dd>
+                        </div>
+                        <div class="col-12">
+                            <dt>Descripción</dt>
+                            <dd>
+                                {{ producto.descripcion|default:'Sin descripción' }}
+                            </dd>
+                        </div>
+                    </dl>
+                </section>
+                <a class="btn btn-link px-0 mt-3"
+                   href="{% url 'producto:producto_list' %}"><i class="bi bi-arrow-left me-2"></i>Volver a productos</a>
+            </div>
+        </div>
     </div>
 {% endblock contenido %}

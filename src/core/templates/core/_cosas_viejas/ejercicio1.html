@@ -1,13 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Ejercicio</h1>
-        <p style="color: red">Nombre: {{ nombre }}</p>
-        <p style="color: blue">Apellido:  {{ apellido }}</p>
-    </body>
-</html>
+{% extends "core/base.html" %}
+{% block title %}Ejercicio | La Caja de Pandora{% endblock title %}
+{% block contenido %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+                <section class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                    <span class="menu-icon mb-3"><i class="bi bi-person-vcard"></i></span>
+                    <h1 class="h3">Datos del ejercicio</h1>
+                    <dl class="detail-list mb-0">
+                        <dt>Nombre</dt>
+                        <dd>
+                            {{ nombre }}
+                        </dd>
+                        <dt>Apellido</dt>
+                        <dd>
+                            {{ apellido }}
+                        </dd>
+                    </dl>
+                    <a class="btn btn-outline-secondary align-self-start"
+                       href="{% url 'core:home' %}">Volver al inicio</a>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock contenido %}

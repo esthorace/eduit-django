@@ -1,6 +1,16 @@
 {% extends "core/base.html" %}
-
+{% block title %}Sesión cerrada | La Caja de Pandora{% endblock title %}
 {% block contenido %}
-    <p>Has cerrado sesión</p>
-    <a href="{% url 'core:home' %}">Ok</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7 col-lg-5">
+                <section class="card border-0 shadow-sm rounded-4 text-center p-4 p-md-5">
+                    <span class="menu-icon mx-auto mb-3"><i class="bi bi-check2-circle"></i></span>
+                    <h1 class="h3">Sesión cerrada</h1>
+                    <p class="text-muted">Has salido correctamente de tu cuenta.</p>
+                    <a class="btn btn-primary" href="{% url 'core:home' %}">Volver al inicio</a>
+                </section>
+            </div>
+        </div>
+    </div>
 {% endblock contenido %}

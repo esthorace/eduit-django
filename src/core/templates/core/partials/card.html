@@ -1,4 +1,7 @@
-<div>
-    <h2>{{ titulo }}</h2>
-    <p>{{ descripcion }}</p>
-</div>
+<article class="col">
+    <div class="card menu-card border-0 rounded-4 p-4">
+        <span class="menu-icon mb-4"><i class="bi {{ icono|default:'bi-stars' }}"></i></span>
+        <h3 class="h5">{{ titulo }}</h3>
+        <p class="text-muted mb-0">{{ descripcion }}</p>
+    </div>
+</article>

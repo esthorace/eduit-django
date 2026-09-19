@@ -1,18 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Ejercicio 2</h1>
-        <h3>Datos de usuarios</h3>
-        {% for usuario in usuarios %}
-            {% for clave, valor in usuario.items %}
-                <p>{{ clave | title }}: {{ valor }}</p>
+{% extends "core/base.html" %}
+{% block title %}Usuarios | La Caja de Pandora{% endblock title %}
+{% block contenido %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <p class="text-primary fw-semibold mb-1">Ejercicio 2</p>
+                <h1 class="h2 mb-0">Datos de usuarios</h1>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for usuario in usuarios %}
+                <div class="col">
+                    <article class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        {% for clave, valor in usuario.items %}<div class="d-flex justify-content-between gap-3 border-bottom py-2"><span class="text-muted">{{ clave|title }}</span><strong class="text-end">{{ valor }}</strong></div>{% endfor %}
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col">
+                    <p class="text-muted">No hay usuarios para mostrar.</p>
+                </div>
             {% endfor %}
-        {% endfor %}
-        <a href="{% url 'core:home' %}">Volver</a>
-    </body>
-</html>
+        </div>
+        <a class="btn btn-link px-0 mt-3" href="{% url 'core:home' %}"><i class="bi bi-arrow-left me-2"></i>Volver al inicio</a>
+    </div>
+{% endblock contenido %}
