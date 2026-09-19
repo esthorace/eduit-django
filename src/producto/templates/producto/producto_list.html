@@ -1,7 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends "core/base.html" %}
+
 {% block contenido %}
     <h2>Producto - Lista</h2>
-    <button><a href="{% url 'producto:producto_create' %}">Crear</a></button>
+    <a href="{% url 'producto:producto_create' %}">Crear</a>
+    <form method="get">
+        <input type="text" name="busqueda" placeholder="Buscar..." />
+    </form>
     <table border="1" cellpadding="5" cellspacing="0">
         <thead>
             <tr>

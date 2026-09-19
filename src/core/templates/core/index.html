@@ -1,4 +1,5 @@
-{% extends 'core/base.html' %}
+{% extends "core/base.html" %}
+
 {% block contenido %}
     <main>
         <nav>
@@ -10,7 +11,7 @@
                     <li>
                         <form method="post" action="{% url 'core:logout' %}">
                             {% csrf_token %}
-                            <input type="submit" value="Cerrar sesión">
+                            <button type="submit">Cerrar sesión</button>
                         </form>
                     </li>
                 {% else %}

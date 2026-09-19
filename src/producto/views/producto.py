@@ -1,4 +1,5 @@
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -14,6 +15,14 @@ from producto.models import Producto
 
 class ProductoListView(ListView):
     model = Producto
+
+    def get_queryset(self) -> QuerySet:
+        busqueda = self.request.GET.get("busqueda")
+        if busqueda:
+            productos = Producto.objects.filter(nombre__icontains=busqueda)
+        else:
+            productos = Producto.objects.all()
+        return productos
 
 
 class ProductoDetailView(DetailView):
