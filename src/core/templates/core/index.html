@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
 
+{% load static %}
+
 {% block contenido %}
     <main>
         <nav>
@@ -8,6 +10,14 @@
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'producto:home' %}">Producto</a></li>
                     <li><a href="#">{{ user.username }}</a></li>
+                    {% with vendedor=user.vendedor_set.first %}
+                        {% if vendedor and vendedor.imagen_perfil %}
+                            <li>
+                                <img src="{{ vendedor.imagen_perfil.url }}"
+                                     alt="Imagen de perfil de {{ user.username }}" />
+                            </li>
+                        {% endif %}
+                    {% endwith %}
                     <li>
                         <form method="post" action="{% url 'core:logout' %}">
                             {% csrf_token %}
@@ -20,11 +30,17 @@
             </ul>
         </nav>
         <h1>La Caja de Pandora</h1>
+        <div>
+            <img src="{% static 'core/images/caja-pandora.avif' %}" alt="" />
+        </div>
         <ul>
             <li>Es un framework moderno para crear aplicaciones web</li>
             <li>Su comunidad mundial es muy grande</li>
             <li>Hay miles de herramientas para no reinventar la rueda</li>
         </ul>
+        {% include "core/partials/card.html" with titulo="Tecnología" descripcion="Ultimos temas de tecno" %}
+        {% include "core/partials/card.html" with titulo="Hogar" descripcion="Todo para el hogar" %}
+        {% include "core/partials/card.html" with titulo="Python" descripcion="Ultimos temas de Python" %}
     </main>
     <footer>
         Hecho en el año {{ año }} - Autor: {{ autor }}
