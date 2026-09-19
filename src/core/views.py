@@ -1,7 +1,12 @@
 from datetime import UTC, datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_not_required  # type:ignore
+
+# from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+
+# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
@@ -12,6 +17,7 @@ from django.views.generic import CreateView
 from core.forms import LoginForm, RegisterForm
 
 
+@login_not_required
 def index(request):
 
     año_actual = datetime.now(UTC).year
@@ -29,6 +35,7 @@ class CustomLoginView(LoginView):
         return super().form_valid(form)
 
 
+# class CustomRegisterView(LoginRequiredMixin, CreateView):
 class CustomRegisterView(CreateView):
     form_class = RegisterForm
     template_name = "core/register.html"

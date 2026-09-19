@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Categoria, Producto
+from .models import Categoria, Producto, Vendedor, Venta
 
 admin.site.register(Categoria)
 
@@ -11,3 +11,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_display_links = ("nombre",)
     list_filter = ("categoria",)
     search_fields = ("nombre",)
+
+
+admin.site.register(Vendedor)
+admin.site.register(Venta)

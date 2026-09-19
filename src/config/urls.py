@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import HttpResponse, JsonResponse
 from django.urls import include, path
-
-from django.http import JsonResponse, HttpResponse
 
 
 def chrome_devtools_view(request):
@@ -31,3 +32,6 @@ urlpatterns = [
     path("", include("core.urls")),
     path("producto/", include("producto.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
